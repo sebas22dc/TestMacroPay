@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using System.Net;
 using TestMacroPay.Models;
 using TestMacroPay.Utilities;
@@ -13,14 +14,22 @@ namespace TestMacroPay.Controllers
 
         [HttpGet]
         [Route("contacts")]
-        public IActionResult contacts([FromQuery] string? phrase)
+        public IActionResult contacts()
         {
-            List<AdressBook> items = Db;
-            if (phrase!= null && phrase != "")
+            var QueryParams = ControllerContext.HttpContext.Request.Query;
+            if (QueryParams.TryGetValue("phrase", out StringValues value))
             {
-                items = Db.FindAll(I => I.name.Contains(phrase));
+                if (string.IsNullOrEmpty(value))
+                {
+                    return BadRequest("Error en la solicitud");
+                }
             }
-
+            string phrase = value.ToString();
+            List<AdressBook> items = Db;
+            if (phrase != null && phrase != "")
+            {
+                items = Db.FindAll(I => I.name.ToLower().Contains(phrase.ToLower()));
+            }
             return Ok(items);
         }
 
@@ -33,7 +42,6 @@ namespace TestMacroPay.Controllers
             {
                 return NotFound("Elemento no encontrado");
             }
-
             return Ok(item);
         }
 
