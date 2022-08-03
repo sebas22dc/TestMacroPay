@@ -8,7 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\fakedatabase.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\fakedatabase.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
